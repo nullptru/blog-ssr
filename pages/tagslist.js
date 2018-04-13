@@ -1,19 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Router from 'next/router';
+import axios from 'axios';
 import { Icon, TypeButton } from '../components';
 import Page from '../components/Page';
 import { styles } from '../pagesComponents/tagslist';
+import config from '../utils/config';
 
 export default class extends React.PureComponent {
   static propTypes = {
-    tags: PropTypes.object,
-    tagsArticles: PropTypes.object,
+    tags2Articles: PropTypes.object,
+    tagList: PropTypes.array,
   }
 
   static defaultProps = {
-    tags: {},
-    tagsArticles: {},
+    tags2Articles: {},
+    tagList: [],
+  }
+
+  static getInitialProps = async ({
+    pathname, query,
+  }) => {
+    const { api } = config;
+    const tagListRes = await axios.get(api.tags.query);
+    const tagsArticlestRes = await axios.get(api.articles.queryTagsArticles);
+
+    return {
+      pathname,
+      query,
+      tags2Articles: tagsArticlestRes.data.data,
+      tagList: tagListRes.data.data,
+    };
   }
 
   handleArticleClick = (id) => {
@@ -23,7 +40,7 @@ export default class extends React.PureComponent {
   }
 
   render() {
-    const { tags: { list: taglist = [] }, tagsArticles: { tags2Articles = [] } } = this.props;
+    const { tags2Articles = {}, tagList = [] } = this.props;
     return (
       <Page>
         {() => {
@@ -31,11 +48,11 @@ export default class extends React.PureComponent {
             <div className="row">
               <div className="col-md-8 col-sm-12 col-md-push-2">
                 <section className={styles.tagsPanel}>
-                  { taglist.map(item => (
+                  { tagList.map(item => (
                     <TypeButton key={item.value} item={item} to={`#${item.value}`} type="tag" commonLink />
                   ))}
                 </section>
-                { taglist.map((item) => {
+                { tagList.map((item) => {
                   const articles = tags2Articles[item.value] || [];
                   return (
                     <div id={item.value} key={item.value} className={styles.articlesPanel}>
