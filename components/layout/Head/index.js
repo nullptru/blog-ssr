@@ -1,7 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import Link from 'next/link'
-import Router from 'next/router'
+import Link from 'next/link';
+import Router from 'next/router';
 import Menu from '../Menu';
 import styles from './index.less';
 
@@ -35,7 +34,7 @@ export default class Head extends React.PureComponent {
     const currentTitle = titleMap[this.clientRouter.pathname] || { bg: '/static/bg.jpg' };
     const defaultActiveKey = this.getDefaultActiveKey(this.clientRouter.pathname);
     return (
-      <header className={styles.header} style={{ backgroundImage: `url(${isCustom ? customBgImage : currentTitle.bg })` }}>
+      <header className={styles.header} style={{ backgroundImage: `url(${isCustom ? customBgImage : currentTitle.bg})` }}>
         <nav>
           <section className={styles.left}>
             <Link href="/"><a className={styles.logo} >废宅的小窝</a></Link>

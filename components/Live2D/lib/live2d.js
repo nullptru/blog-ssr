@@ -18,7 +18,7 @@ const {
   PartsDataID,
   DrawDataID,
   BaseDataID,
-  ParamID
+  ParamID,
 } = window;
 
 export {
@@ -36,5 +36,5 @@ export {
   PartsDataID,
   DrawDataID,
   BaseDataID,
-  ParamID
+  ParamID,
 };

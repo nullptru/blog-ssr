@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'next/link';
+import Link from 'next/link';
 import { Card } from '../../../components';
 import styles from './index.less';
 

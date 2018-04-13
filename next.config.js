@@ -17,7 +17,16 @@ module.exports = withLess({
       fs: 'empty',
     };
 
-    console.log(config.module.rules);
+    config.devServer = {
+      proxy: {
+        '/api/v1': {
+          target: 'http://localhost:3001/',
+          changeOrigin: true,
+          secure: false,
+          pathRewrite: { '/api/v1': '' },
+        },
+      },
+    };
     config.module.rules.push({
       test: /\.css$/,
       use: [
@@ -25,42 +34,40 @@ module.exports = withLess({
         {
           loader: 'css-loader',
           options: {
-            modules: true
-          }
-        }
-      ]
+            modules: true,
+          },
+        },
+      ],
     });
     config.module.rules.push({
       test: /\.(png|jpg)$/,
-      loader: 'url-loader?limit=8192'
+      loader: 'url-loader?limit=8192',
     });
-    config.plugins.push(
-      new SWPrecacheWebpackPlugin({
-        verbose: true,
-        templateFilePath: 'config/service-worker.tmpl',
-        navigateFallback: '/',
-        filename: 'service-worker.js',
-        staticFileGlobs: [
-          // 'static/**/*.*',
-        ],
-        // mergeStaticsConfig: true,
-        staticFileGlobsIgnorePatterns: [/^build\/dist\/.*/],
-        stripPrefixMulti: {
-          [path.resolve(__dirname, 'build/static')]: '_next/static',
-          [path.resolve(__dirname, 'build/bundles/pages')]: `_next/${buildId}/page`,
-          [path.resolve(__dirname, 'build')]: `_next/${buildId}`,
+    config.plugins.push(new SWPrecacheWebpackPlugin({
+      verbose: true,
+      templateFilePath: 'config/service-worker.tmpl',
+      navigateFallback: '/',
+      filename: 'service-worker.js',
+      staticFileGlobs: [
+        // 'static/**/*.*',
+      ],
+      // mergeStaticsConfig: true,
+      staticFileGlobsIgnorePatterns: [/^build\/dist\/.*/],
+      stripPrefixMulti: {
+        [path.resolve(__dirname, 'build/static')]: '_next/static',
+        [path.resolve(__dirname, 'build/bundles/pages')]: `_next/${buildId}/page`,
+        [path.resolve(__dirname, 'build')]: `_next/${buildId}`,
+      },
+      runtimeCaching: [
+        {
+          handler: 'networkFirst',
+          urlPattern: /^https?.*^[.(js|css|png|jpg)]$/,
+        }, {
+          handler: 'cacheFirst',
+          urlPattern: /\/$/,
         },
-        runtimeCaching: [
-          {
-            handler: 'networkFirst',
-            urlPattern: /^https?.*^[.(js|css|png|jpg)]$/,
-          }, {
-            handler: 'cacheFirst',
-            urlPattern: /\/$/,
-          },
-        ],
-      })
-    );
+      ],
+    }));
 
     return config;
   },

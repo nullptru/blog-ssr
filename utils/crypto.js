@@ -1,12 +1,7 @@
 import * as crypto from 'crypto-js';
-import jsencrypt from 'jsencrypt';
-import config from './config';
 
 const AuthTokenKey = '0123456789abcdef'; // AES密钥
 const AuthTokenIv = '0123456789abcdef'; // AES向量
-
-const crypter = new jsencrypt.JSEncrypt();
-crypter.setPublicKey(config.publicKey);
 
 /* AES加密 */
 export function encrypt(data) {
@@ -32,8 +27,4 @@ export function decrypt(data) {
     padding: crypto.pad.Pkcs7,
   });
   return JSON.parse(decrypted.toString(crypto.enc.Utf8));
-}
-
-export function RSAEncrypt(data) {
-  return crypter.encrypt(data || '');
 }

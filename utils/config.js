@@ -9,10 +9,6 @@ export default {
   publicKey: 'geass_blog',
   api: {
     articles: {
-      upload: `${api}article/image/upload`,
-      create: `${api}article`,
-      delete: `${api}article/:id`,
-      update: `${api}article`,
       query: `${api}articles/page`,
       queryAll: `${api}articles/all`,
       querySingle: `${api}article/:id`,
@@ -23,13 +19,6 @@ export default {
     },
     tags: {
       query: `${api}tags/page`,
-      create: `${api}tag`,
-      delete: `${api}tag/:id`,
-      update: `${api}tag`,
-    },
-    login: {
-      login: `${api}login`,
-      loginStatus: `${api}login/status`,
     },
     comments: {
       query: `${api}comments/article/:id`,

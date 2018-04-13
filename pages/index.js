@@ -1,21 +1,34 @@
 import React from 'react';
 import Router from 'next/router';
 import queryString from 'query-string';
+import axios from 'axios';
+import { decrypt, encrypt } from '../utils/crypto';
 import { LatestPostCard, TagsCard, styles } from '../pagesComponents/index';
 import Page from '../components/Page';
-import { Search, Pagination, Loading, ArticleItem as Article } from '../components';
+import { Search, Pagination, ArticleItem as Article } from '../components';
 
 export default class HomePage extends React.PureComponent {
-  state = {
-    isLoading: false,
-    isMount: false,
-  }
-  componentDidMount() {
-    import('../utils/crypto').then((module) => {
-      this.decrypt = module.decrypt;
-      this.encrypt = module.encrypt;
-      this.setState({ isMount: true });
-    });
+  static getInitialProps = async ({
+    pathname, query, asPath,
+  }) => {
+    console.log(pathname, query, asPath);
+    const params = decrypt(query.params);
+    const articlesRes = await axios.get('http://localhost:3001/articles/page', { params });
+    const latestRes = await axios.get('http://localhost:3001/articles/latest');
+    const tagListRes = await axios.get('http://localhost:3001/tags/page');
+
+    return {
+      pathname,
+      query,
+      articles: articlesRes.data.data,
+      pagination: {
+        total: articlesRes.data.total,
+        pageSize: articlesRes.data.pageSize,
+        current: articlesRes.data.current,
+      },
+      tagList: tagListRes.data.data,
+      latestPosts: latestRes.data.data,
+    };
   }
 
   onArticleClick = (id) => {
@@ -31,28 +44,27 @@ export default class HomePage extends React.PureComponent {
     }
     Router.push({
       pathname: '/',
-      search: `params=${this.encrypt(searchData)}`,
+      search: `params=${encrypt(searchData)}`,
     });
   }
 
   handlePaginationChange = ({ current }) => {
     const searchData = { current };
-    const queryParams = this.decrypt(queryString.parse(Router.search).params) || {};
+    const queryParams = decrypt(queryString.parse(Router.search).params) || {};
     if (queryParams.search) {
       searchData.search = queryParams.search;
     }
     Router.push({
       pathname: '/',
-      search: `params=${this.encrypt(searchData)}`,
+      search: `params=${encrypt(searchData)}`,
     });
   }
 
   render() {
-    const { isLoading, isMount } = this.state;
-    const tagList = [];
-    const articles = { list: [], latestPosts: [], pagination: {} };
-    const { list, latestPosts, pagination } = articles;
-    const queryParams = isMount ? this.decrypt(queryString.parse(Router.search).params) || {} : {};
+    const {
+      articles = [], tagList, latestPosts, pagination, query,
+    } = this.props;
+    const queryParams = decrypt(query.params) || {};
 
     return (
       <Page isCustom={false}>
@@ -62,12 +74,11 @@ export default class HomePage extends React.PureComponent {
               <div className="row" style={{ marginTop: '4px' }} >
                 <div className="col-md-8 col-sm-12">
                   <div style={{ position: 'relative', minHeight: '300px' }}>
-                    <Loading spinning={isLoading} />
-                    {list.length === 0 && !isLoading ? (
+                    {articles.length === 0 ? (
                       <div className={styles.vacantContainer}>
                         这个区域暂时没有内容呢QAQ，请去其它地方看看吧～
                       </div>
-                    ) : list.map(article =>
+                    ) : articles.map(article =>
                       <Article article={article} key={article.id} onClick={this.onArticleClick.bind(null, article.id)} />)
                     }
                   </div>

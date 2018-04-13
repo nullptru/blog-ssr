@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import PropTypes from 'prop-types';
 import styles from './index.less';
 
@@ -14,7 +15,11 @@ export default class TypeButton extends React.PureComponent {
     const classList = [styles.typeButton];
     classList.push(styles[type]);
     const dom = commonLink ? <a className={classList.join(' ')} href={to} key={item.value} onClick={this.onClick.bind(this)} {...rest} >{item.name}</a>
-      : <Link className={classList.join(' ')} to={to} key={item.value} onClick={this.onClick.bind(this)} {...rest} >{item.name}</Link>;
+      : (
+        <Link href={to} key={item.value}>
+          <a className={classList.join(' ')} onClick={this.onClick.bind(this)} {...rest} >{item.name}</a>
+        </Link>
+      );
 
     return dom;
   }
