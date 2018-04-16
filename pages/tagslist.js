@@ -40,9 +40,9 @@ export default class extends React.PureComponent {
   }
 
   render() {
-    const { tags2Articles = {}, tagList = [] } = this.props;
+    const { tags2Articles = {}, tagList = [], pathname } = this.props;
     return (
-      <Page>
+      <Page isCustom={false} currentPath={pathname}>
         {() => {
           return (
             <div className="row">

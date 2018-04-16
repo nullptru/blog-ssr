@@ -1,12 +1,31 @@
 import React from 'react';
 import Link from 'next/link';
+import Router from 'next/router';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
-import { Icon, Loading } from '../components';
+import { Icon } from '../components';
 import Page from '../components/Page';
 import { Comment as CommentComponent, styles } from '../pagesComponents/articleDetail';
+import config from '../utils/config';
 
 export default class extends React.PureComponent {
+  static getInitialProps = async ({
+    pathname, query, asPath,
+  }) => {
+    const { api } = config;
+    const articlesRes = await axios.get(api.articles.querySingle.replace(':id', query.id));
+    const commentsRes = await axios.get(api.comments.query.replace(':id', query.id));
+
+    return {
+      pathname,
+      query,
+      asPath,
+      article: articlesRes.data.data,
+      comments: commentsRes.data.data,
+    };
+  }
+
   static propTypes = {
     article: PropTypes.object,
   }
@@ -16,41 +35,47 @@ export default class extends React.PureComponent {
   }
 
   state = {
-    isLoading: false,
     isMount: false,
+    comments: undefined,
   }
 
   componentDidMount() {
-    // this.props.dispatch({
-    //   type: 'articles/updateState',
-    //   payload: {
-    //     article: {},
-    //   },
-    // });
     import('../components/HighLight').then((module) => {
       this.HighLight = module.default;
       this.setState({ isMount: true });
     });
   }
 
+  async handleCreateComment(data) {
+    const createCommentRes = await axios.post(config.api.comments.create.replace(':id', this.props.query.id), data);
+    
+    if (createCommentRes.data.success) {
+      Router.reload(this.props.asPath);
+      const commentRes = await axios.get(config.api.comments.query.replace(':id', this.props.query.id));
+      this.setState({
+        comments: commentRes.data.data,
+      });
+    }
+    return Promise.resolve(createCommentRes.data.success);
+  }
+
   render() {
-    const { article } = this.props;
-    const { isLoading, isMount } = this.state;
+    const { article, pathname, comments } = this.props;
+    const { isMount } = this.state;
     const { HighLight } = this;
     const tags = article.tags || [];
+    const commentList = this.state.comments || comments;
     return (
-      <Page customBgImage="" >
+      <Page customBgImage="" currentPath={pathname}>
         {() => {
           return (
             <React.Fragment>
               <div className={styles.detailContainer}>
                 <article className={styles.detail}>
-                  <Loading spinning={isLoading} />
                   <header>
                     <div className={styles.title}>{ article.title }</div>
                     <div className={styles.meta}>
-                      {isLoading ? <span />
-                        : <span className={styles.time}>Posted by { article.author } on { article.createdTime }</span>}
+                      <span className={styles.time}>Posted by { article.author } on { article.createdTime }</span>
                     </div>
                   </header>
                   {isMount ? <HighLight className={styles.content}>
@@ -67,7 +92,7 @@ export default class extends React.PureComponent {
                   {article.next ? <Link href={`/article/${article.next.id}` || '/'}><a className={styles.next}><span>Next</span><span className={styles.title}>{article.next.title}</span></a></Link> : <span className={styles.noMore}>没有更多</span>}
                 </div>
               </div>
-              {article.id && <CommentComponent articleId={article.id} key={article.id} />}
+              {article.id && <CommentComponent key={article.id} comments={commentList} onCreateComment={this.handleCreateComment.bind(this)} />}
             </React.Fragment>
           );
         }}

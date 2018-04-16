@@ -4,26 +4,10 @@ import { Input, ThrottleButton } from '../../components';
 import styles from './styles.less';
 
 class Comment extends React.PureComponent {
-  componentWillMount() {
-    // this.props.dispatch({
-    //   type: 'comments/query',
-    //   payload: {
-    //     id: this.props.articleId,
-    //   },
-    // });
+  state = {
+    inputErr: false,
+    createErr: false,
   }
-
-  componentWillUnmount() {
-    // this.props.dispatch({
-    //   type: 'comments/updateState',
-    //   payload: {
-    //     list: [],
-    //     inputErr: false,
-    //     createErr: false,
-    //   },
-    // });
-  }
-
   checkEmpty = (rule, value, callback) => {
     if (!value || value.trim() === '') {
       callback('请不要让我空着哦～');
@@ -32,51 +16,45 @@ class Comment extends React.PureComponent {
   }
 
   handleCommentCreate = () => {
-    // const { dispatch, articleId, form: { validateFields, getFieldsValue, setFieldsValue } } = this.props;
-    // validateFields((errors) => {
-    //   if (errors) {
-    //     dispatch({
-    //       type: 'comments/updateState',
-    //       payload: {
-    //         inputErr: true,
-    //         createErr: true,
-    //       },
-    //     });
-    //     return;
-    //   }
-    //   dispatch({
-    //     type: 'comments/updateState',
-    //     payload: {
-    //       createErr: false,
-    //     },
-    //   });
-    //   dispatch({
-    //     type: 'comments/create',
-    //     payload: {
-    //       ...getFieldsValue(),
-    //       id: articleId,
-    //     },
-    //   }).then(() => {
-    //     if (!this.props.comments.createErr) {
-    //       setFieldsValue({
-    //         author: '',
-    //         message: '',
-    //       });
-    //     }
-    //   });
-    // });
+    const { form: { validateFields, getFieldsValue, setFieldsValue } } = this.props;
+
+    validateFields((errors) => {
+      if (errors) {
+        this.setState({
+          inputErr: true,
+          createErr: true,
+        });
+        return;
+      }
+      this.props.onCreateComment({
+        ...getFieldsValue(),
+      }).then((result) => {
+        if (result) {
+          setFieldsValue({
+            author: '',
+            message: '',
+          });
+
+          this.setState({
+            inputErr: false,
+            createErr: false,
+          });
+        }
+      });
+    });
   };
 
   render() {
-    const { comments: { list: commentsList, createErr, inputErr }, form: { getFieldDecorator } } = this.props;
+    const { comments, form: { getFieldDecorator } } = this.props;
+    const { createErr, inputErr } = this.state;
 
     return (
       <div className={styles.commentContainer}>
-        {commentsList.length > 0 && (
+        {comments.length > 0 && (
           <React.Fragment>
             <div className={styles.header}>评论区：</div>
             <div className={styles.list}>
-              {commentsList.map(comment => (
+              {comments.map(comment => (
                 <section key={comment.id} className={styles.commentItem}>
                   <header>
                     <span className={styles.name}>{comment.author}</span>

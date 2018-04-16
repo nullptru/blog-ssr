@@ -1,6 +1,5 @@
 import React from 'react';
 import Router from 'next/router';
-import queryString from 'query-string';
 import axios from 'axios';
 import { decrypt, encrypt } from '../utils/crypto';
 import { LatestPostCard, TagsCard, styles } from '../pagesComponents/index';
@@ -50,7 +49,7 @@ export default class HomePage extends React.PureComponent {
 
   handlePaginationChange = ({ current }) => {
     const searchData = { current };
-    const queryParams = decrypt(queryString.parse(Router.search).params) || {};
+    const queryParams = decrypt(this.props.query.params) || {};
     if (queryParams.search) {
       searchData.search = queryParams.search;
     }
@@ -62,12 +61,12 @@ export default class HomePage extends React.PureComponent {
 
   render() {
     const {
-      articles = [], tagList, latestPosts, pagination, query,
+      articles = [], tagList, latestPosts, pagination, query, pathname,
     } = this.props;
     const queryParams = decrypt(query.params) || {};
 
     return (
-      <Page isCustom={false}>
+      <Page isCustom={false} currentPath={pathname}>
         {() => {
           return (
             <div>

@@ -10,9 +10,7 @@ export default {
   api: {
     articles: {
       query: `${api}articles/page`,
-      queryAll: `${api}articles/all`,
       querySingle: `${api}article/:id`,
-      querySingleAdmin: `${api}article/admin/:id`,
       queryLatest: `${api}articles/latest`,
       queryByTag: `${api}articles/tags/:tag/page`,
       queryTagsArticles: `${api}articles/tags`,

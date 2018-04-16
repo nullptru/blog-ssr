@@ -5,15 +5,6 @@ import Menu from '../Menu';
 import styles from './index.less';
 
 export default class Head extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.clientRouter = { pathname: '/' };
-  }
-
-  componentDidMount() {
-    this.clientRouter = Router;
-  }
-
   onMenuClick = (key) => {
     Router.push(key);
   };
@@ -29,10 +20,10 @@ export default class Head extends React.PureComponent {
 
   render() {
     const {
-      menuItems, isCustom, customBgImage, titleMap,
+      menuItems, isCustom, customBgImage, titleMap, currentPath,
     } = this.props;
-    const currentTitle = titleMap[this.clientRouter.pathname] || { bg: '/static/bg.jpg' };
-    const defaultActiveKey = this.getDefaultActiveKey(this.clientRouter.pathname);
+    const currentTitle = titleMap[currentPath] || { bg: '/static/bg.jpg' };
+    const defaultActiveKey = this.getDefaultActiveKey(currentPath);
     return (
       <header className={styles.header} style={{ backgroundImage: `url(${isCustom ? customBgImage : currentTitle.bg})` }}>
         <nav>
