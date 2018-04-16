@@ -67,22 +67,36 @@ export default class HomePage extends React.PureComponent {
         pagination: {
           total: articlesRes.data.total,
           pageSize: articlesRes.data.pageSize,
-          current: articlesRes.data.current,
+          current: Number(articlesRes.data.current),
         },
       });
     }
   }
 
-  handlePaginationChange = ({ current }) => {
+  async handlePaginationChange({ current }) {
     const searchData = { current };
+    const { api } = config;
     const queryParams = decrypt(this.props.query.params) || {};
     if (queryParams.search) {
       searchData.search = queryParams.search;
     }
-    Router.push({
-      pathname: this.props.asPath.split('?')[0],
-      search: `params=${encrypt(searchData)}`,
-    });
+    let articlesRes;
+    if (this.props.query.tagId) {
+      articlesRes = await axios.get(api.articles.queryByTag.replace(':tag', this.props.query.tagId), { params: searchData });
+    } else {
+      articlesRes = await axios.get(api.articles.query, { params: searchData });
+    }
+    if (articlesRes.data.success) {
+      Router.push(this.props.pathname, `${this.props.asPath.split('?')[0]}?params=${encrypt(searchData)}`, { shallow: true });
+      this.setState({
+        articles: articlesRes.data.data,
+        pagination: {
+          total: articlesRes.data.total,
+          pageSize: articlesRes.data.pageSize,
+          current: Number(articlesRes.data.current),
+        },
+      });
+    }
   }
 
   render() {
@@ -141,7 +155,7 @@ export default class HomePage extends React.PureComponent {
                       <Article article={article} key={article.id} onClick={this.onArticleClick.bind(null, article.id)} />)
                     }
                   </div>
-                  <Pagination pagination={pagination} onSelect={this.handlePaginationChange} />
+                  <Pagination pagination={pagination} onSelect={this.handlePaginationChange.bind(this)} />
                 </div>
                 <div className="col-md-4 col-sm-12">
                   <Search withBox onSearch={this.onSearch.bind(this)} query={queryParams.search} />
