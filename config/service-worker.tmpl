@@ -38,7 +38,7 @@
 'use strict';
 
 var precacheConfig = <%= precacheConfig %>;
-precacheConfig = precacheConfig.concat([['/', '']]) // cache the root dir
+// precacheConfig = precacheConfig.concat([['/', '']]) // cache the root dir
 var cacheName = 'sw-precache-<%= version %>-<%= cacheId %>-' + (self.registration ? self.registration.scope : '');
 
 <% if (handleFetch) { %>

@@ -1,7 +1,7 @@
 let api;
 
 if (process.env.NODE_ENV === 'production') {
-  api = 'http://geasscn.me:3000/';
+  api = 'http://localhost:3001/';
 } else {
   api = 'http://localhost:3001/';
 }

@@ -48,7 +48,7 @@ export default class extends React.PureComponent {
 
   async handleCreateComment(data) {
     const createCommentRes = await axios.post(config.api.comments.create.replace(':id', this.props.query.id), data);
-    
+
     if (createCommentRes.data.success) {
       Router.reload(this.props.asPath);
       const commentRes = await axios.get(config.api.comments.query.replace(':id', this.props.query.id));

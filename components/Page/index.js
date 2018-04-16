@@ -50,6 +50,16 @@ export default class Page extends React.PureComponent {
   }
 
   componentDidMount() {
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/service-worker.js')
+        .then(() => {
+          console.log('service worker registration successful'); // eslint-disable-line
+        })
+        .catch((err) => {
+          console.warn('service worker registration failed', err.message); // eslint-disable-line
+        });
+    }
     import('../Live2D').then((module) => {
       this.Live2D = module.default;
       this.setState({ isMount: true });
@@ -71,7 +81,7 @@ export default class Page extends React.PureComponent {
 
   render() {
     const {
-      isCustom, titleMap, menuItems, currentPath, children = () => '',
+      isCustom, menuItems, currentPath, children = () => '', titleMap,
     } = this.props;
 
     const { Live2D } = this;

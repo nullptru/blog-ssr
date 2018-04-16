@@ -49,22 +49,20 @@ module.exports = withLess({
       navigateFallback: '/',
       filename: 'service-worker.js',
       staticFileGlobs: [
-        // 'static/**/*.*',
+        'static/*.*',
       ],
-      // mergeStaticsConfig: true,
-      staticFileGlobsIgnorePatterns: [/^build\/dist\/.*/],
+      mergeStaticsConfig: true,
+      staticFileGlobsIgnorePatterns: [/^build\/dist\/.*/, /.map$/, /static\/(haru|haruto|miku|murakumo|shizuku)\/.*/],
       stripPrefixMulti: {
         [path.resolve(__dirname, 'build/static')]: '_next/static',
+        [path.resolve(__dirname, 'build/chunks')]: '_next/webpack/chunks',
         [path.resolve(__dirname, 'build/bundles/pages')]: `_next/${buildId}/page`,
         [path.resolve(__dirname, 'build')]: `_next/${buildId}`,
       },
       runtimeCaching: [
         {
-          handler: 'networkFirst',
-          urlPattern: /^https?.*^[.(js|css|png|jpg)]$/,
-        }, {
           handler: 'cacheFirst',
-          urlPattern: /\/$/,
+          urlPattern: /^https?.*[^.(js|css|png|jpg)]$/,
         },
       ],
     }));
