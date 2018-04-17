@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import HeadMeta from '../head';
 import { Head, Footer, Icon, ErrorBoundary } from '../index';
 import styles from '../../styles/index.less';
+import config from '../../utils/config';
 
 export default class Page extends React.PureComponent {
   static propType = {
@@ -50,8 +52,8 @@ export default class Page extends React.PureComponent {
   }
 
   componentDidMount() {
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker
+    if ('serviceWorker' in navigator) { // eslint-disable-line
+      navigator.serviceWorker  // eslint-disable-line
         .register('/service-worker.js')
         .then(() => {
           console.log('service worker registration successful'); // eslint-disable-line
@@ -67,16 +69,16 @@ export default class Page extends React.PureComponent {
   }
 
   handleError = (err, errInfo) => {
+    const { api } = config;
     // eslint-disable-next-line
-    // const ua = navigator.appVersion;
-    // this.props.dispatch({
-    //   type: 'app/errorHandle',
-    //   payload: {
-    //     errInfo: `${err.name}：${err.message}`,
-    //     stack: errInfo.componentStack,
-    //     ua,
-    //   },
-    // });
+    const ua = navigator.appVersion;
+    axios.post(api.errors.create, {
+      params: {
+        errInfo: `${err.name}：${err.message}`,
+        stack: errInfo.componentStack,
+        ua,
+      },
+    });
   }
 
   render() {

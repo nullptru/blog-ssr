@@ -13,14 +13,12 @@ app.prepare()
 
     server.get('/article/:id', (req, res) => {
       const actualPage = '/articleDetail';
-      console.log(req.params, req.body, req.query);
       const queryParams = { id: req.params.id };
       return app.render(req, res, actualPage, queryParams);
     });
 
     server.get('/tags/:tagId', (req, res) => {
       const actualPage = '/index';
-      console.log(req.params, req.body, req.query);
       const queryParams = { tagId: req.params.tagId.split('?')[0], ...req.query };
       return app.render(req, res, actualPage, queryParams);
     });
@@ -38,18 +36,17 @@ app.prepare()
         const filePath = join(__dirname, 'build', realPathname);
         return app.serveStatic(req, res, filePath);
       } else {
-        // console.log(req.url); // eslint-disable-line
         return handle(req, res, parsedUrl);
       }
     });
 
     server.listen(3000, (err) => {
       if (err) throw err;
-      console.log(`> Ready on http://localhost:3000`)
+      console.log(`> Ready on http://localhost:3000`) // eslint-disable-line
     });
   })
   .catch((ex) => {
-    console.error(ex.stack);
+    console.error(ex.stack); // eslint-disable-line
     process.exit(1);
   });
 
