@@ -2,7 +2,7 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const withLess = require('@zeit/next-less');
 const path = require('path');
 
-const buildId = 'your-build-id';
+const buildId = 'geass-blog-ssr';
 module.exports = withLess({
   cssModules: true,
   distDir: 'build',
@@ -62,7 +62,7 @@ module.exports = withLess({
       runtimeCaching: [
         {
           handler: 'cacheFirst',
-          urlPattern: /^https?.*[^.(js|css|png|jpg)]$/,
+          urlPattern: /^https?:\/\/(?!(geasscn.me|localhost)[^.]*\.(js|css|png|jpg)).*$/,
         },
       ],
     }));
