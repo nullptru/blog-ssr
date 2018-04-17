@@ -14,3 +14,4 @@ export { default as ScrollTop } from './ScrollToTop';
 export { default as ThrottleButton } from './ThrottleButton';
 export { default as ErrorBoundary } from './ErrorBoundary';
 export { default as ArticleItem } from './ArticleItem';
+export { default as Loading } from './Loading';

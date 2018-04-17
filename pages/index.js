@@ -4,7 +4,7 @@ import axios from 'axios';
 import { decrypt, encrypt } from '../utils/crypto';
 import { LatestPostCard, TagsCard, styles } from '../pagesComponents/index';
 import Page from '../components/Page';
-import { Search, Pagination, ArticleItem as Article } from '../components';
+import { Search, Pagination, Loading, ArticleItem as Article } from '../components';
 import config from '../utils/config';
 
 export default class HomePage extends React.PureComponent {
@@ -40,6 +40,7 @@ export default class HomePage extends React.PureComponent {
   state = {
     articles: undefined,
     pagination: undefined,
+    isLoading: false,
   }
 
   onArticleClick = (id) => {
@@ -49,6 +50,7 @@ export default class HomePage extends React.PureComponent {
   }
 
   async onSearch(query) {
+    this.setState({ isLoading: true });
     const { api } = config;
     const searchData = {};
     if (query) {
@@ -60,6 +62,7 @@ export default class HomePage extends React.PureComponent {
     } else {
       articlesRes = await axios.get(api.articles.query, { params: searchData });
     }
+    this.setState({ isLoading: false });
     if (articlesRes.data.success) {
       Router.push(this.props.pathname, `${this.props.asPath.split('?')[0]}?params=${encrypt(searchData)}`, { shallow: true });
       this.setState({
@@ -74,6 +77,7 @@ export default class HomePage extends React.PureComponent {
   }
 
   async handlePaginationChange({ current }) {
+    this.setState({ isLoading: true });
     const searchData = { current };
     const { api } = config;
     const queryParams = decrypt(this.props.query.params) || {};
@@ -86,6 +90,7 @@ export default class HomePage extends React.PureComponent {
     } else {
       articlesRes = await axios.get(api.articles.query, { params: searchData });
     }
+    this.setState({ isLoading: false });
     if (articlesRes.data.success) {
       Router.push(this.props.pathname, `${this.props.asPath.split('?')[0]}?params=${encrypt(searchData)}`, { shallow: true });
       this.setState({
@@ -147,6 +152,7 @@ export default class HomePage extends React.PureComponent {
               <div className="row" style={{ marginTop: '4px' }} >
                 <div className="col-md-8 col-sm-12">
                   <div style={{ position: 'relative', minHeight: '300px' }}>
+                    <Loading spinning={this.state.isLoading} />
                     {articles.length === 0 ? (
                       <div className={styles.vacantContainer}>
                         这个区域暂时没有内容呢QAQ，请去其它地方看看吧～

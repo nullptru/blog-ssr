@@ -11,7 +11,7 @@ export default class LatestPostCard extends React.PureComponent {
       <Card title="Latest Posts">
         { latestPosts.map(item => (
           <div className={styles.item} key={item.id}>
-            <Link href={`/article/${item.id}`} prefetch><a>{ item.title }</a></Link>
+            <Link href={`/article/${item.id}`}><a>{ item.title }</a></Link>
           </div>
         )) }
       </Card>

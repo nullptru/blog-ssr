@@ -88,8 +88,8 @@ export default class extends React.PureComponent {
                   </section>}
                 </article>
                 <div className={styles.btnGroup}>
-                  {article.pre ? <Link href={`/article/${article.pre.id}` || '/'} prefetch><a className={styles.pre}><span>Previous</span><span className={styles.title}>{article.pre.title}</span></a></Link> : <span className={styles.noMore}>没有更多</span>}
-                  {article.next ? <Link href={`/article/${article.next.id}` || '/'} prefetch><a className={styles.next}><span>Next</span><span className={styles.title}>{article.next.title}</span></a></Link> : <span className={styles.noMore}>没有更多</span>}
+                  {article.pre ? <Link href={`/article/${article.pre.id}` || '/'}><a className={styles.pre}><span>Previous</span><span className={styles.title}>{article.pre.title}</span></a></Link> : <span className={styles.noMore}>没有更多</span>}
+                  {article.next ? <Link href={`/article/${article.next.id}` || '/'}><a className={styles.next}><span>Next</span><span className={styles.title}>{article.next.title}</span></a></Link> : <span className={styles.noMore}>没有更多</span>}
                 </div>
               </div>
               {article.id && <CommentComponent key={article.id} comments={commentList} onCreateComment={this.handleCreateComment.bind(this)} />}
