@@ -5,7 +5,8 @@
     "build": "next build",
     "start": "NODE_ENV=production node server.js",
     "lint": "eslint --ext .js pages components tests",
-    "lint:fix": "eslint --fix --ext .js pages components tests"
+    "lint:fix": "eslint --fix --ext .js pages components tests",
+    "analyze": "ANALYZE=1 next build"
   },
   "dependencies": {
     "@zeit/next-less": "^0.2.0",
@@ -34,6 +35,7 @@
     "file-loader": "^1.1.11",
     "style-loader": "^0.20.3",
     "sw-precache-webpack-plugin": "^0.11.5",
-    "url-loader": "^1.0.1"
+    "url-loader": "^1.0.1",
+    "webpack-bundle-analyzer": "^2.11.1"
   }
 }

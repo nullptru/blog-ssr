@@ -26,7 +26,7 @@ export default class ArticleItem extends React.PureComponent {
         {article.tags && article.tags.length > 0 && <div className={styles.tags}>
           <Icon type="tags" />
           { article.tags.map(tag =>
-            <Link key={tag.id} href={`/tags/${tag.value}`}><a className={styles.tag}>{ tag.name }</a></Link>) }
+            <Link key={tag.id} href={`/tags/${tag.value}`} prefetch><a className={styles.tag}>{ tag.name }</a></Link>) }
         </div>}
       </section>
     );

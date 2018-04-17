@@ -1,6 +1,9 @@
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const withLess = require('@zeit/next-less');
 const path = require('path');
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+
+const { ANALYZE } = process.env;
 
 const buildId = 'geass-blog-ssr';
 module.exports = withLess({
@@ -17,10 +20,17 @@ module.exports = withLess({
       fs: 'empty',
     };
 
+    if (ANALYZE) {
+      config.plugins.push(new BundleAnalyzerPlugin({
+        analyzerMode: 'server',
+        analyzerPort: 3000,
+        openAnalyzer: true,
+      }));
+    }
     config.devServer = {
       proxy: {
         '/api/v1': {
-          target: 'http://localhost:3001/',
+          target: 'http://localhost:3000/',
           changeOrigin: true,
           secure: false,
           pathRewrite: { '/api/v1': '' },
