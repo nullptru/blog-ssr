@@ -1,6 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import HeadMeta from '../head';
 import { Head, Footer, Icon, ErrorBoundary } from '../index';
 import styles from '../../styles/index.less';
@@ -66,6 +66,14 @@ export default class Page extends React.PureComponent {
       this.Live2D = module.default;
       this.setState({ isMount: true });
     });
+    import('nprogress').then((module) => {
+      this.NProgress = module;
+      this.NProgress.done();
+    });
+  }
+
+  componentWillUnmount() {
+    this.NProgress.start();
   }
 
   handleError = (err, errInfo) => {

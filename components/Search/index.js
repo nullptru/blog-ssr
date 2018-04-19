@@ -6,9 +6,11 @@ import styles from './index.less';
 export default class Search extends React.PureComponent {
   constructor(props) {
     super(props);
+
     this.state = {
       query: props.query,
     };
+
     this.onChange = this.onChange.bind(this);
     this.onSearch = this.onSearch.bind(this);
     this.onKeyDown = this.onKeyDown.bind(this);

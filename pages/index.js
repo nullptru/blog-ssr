@@ -1,11 +1,11 @@
 import React from 'react';
-import Router from 'next/router';
 import axios from 'axios';
+import Router from 'next/router';
+import Page from '../components/Page';
+import config from '../utils/config';
 import { decrypt, encrypt } from '../utils/crypto';
 import { LatestPostCard, TagsCard, styles } from '../pagesComponents/index';
-import Page from '../components/Page';
 import { Search, Pagination, Loading, ArticleItem as Article } from '../components';
-import config from '../utils/config';
 
 export default class HomePage extends React.PureComponent {
   static getInitialProps = async ({

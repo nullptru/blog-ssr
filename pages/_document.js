@@ -9,7 +9,8 @@ export default class MyDocument extends Document {
         <Head>
           <link rel="stylesheet" href="/_next/static/style.css" />
           <link rel="stylesheet" href="/static/iconfont.css" />
-          <link rel="manifest" href="/static/manifest.json" />
+          <link rel="stylesheet" href="/static/iconfont.css" />
+          <link rel="stylesheet" href="/static/nprogress.css" />
           {/* Add to home screen for Safari on iOS */}
           <meta name="apple-mobile-web-app-capable" content="yes" />
           <meta name="apple-mobile-web-app-status-bar-style" content="black" />
