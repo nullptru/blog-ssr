@@ -6,6 +6,7 @@
     "start": "NODE_ENV=production node server.js",
     "lint": "eslint --ext .js pages components tests",
     "lint:fix": "eslint --fix --ext .js pages components tests",
+    "pm": "NODE_ENV=production pm2 start --interpreter node server.js",
     "analyze": "ANALYZE=1 next build"
   },
   "dependencies": {

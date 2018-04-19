@@ -1,9 +1,9 @@
 let api;
 
 if (process.env.NODE_ENV === 'production') {
-  api = 'http://localhost:3000/';
+  api = 'https://geasscn.me:3000/';
 } else {
-  api = 'http://localhost:3000/';
+  api = 'https://localhost:3000/';
 }
 export default {
   publicKey: 'geass_blog',
