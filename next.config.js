@@ -72,11 +72,11 @@ module.exports = withLess({
       runtimeCaching: [
         {
           handler: 'cacheFirst',
-          urlPattern: /^https?:\/\/(?!(geasscn.me|localhost)[^.]*\.(js|css|png|jpg|moc|mtn|json))$/,
+          urlPattern: /^https?:\/\/(?!(geasscn.me|localhost)[^.]*\.(js|css|png|jpg))(geasscn.me|localhost).+\..*$/,
         },
         {
           handler: 'networkFirst',
-          urlPattern: /^https?:\/\/(?!(geasscn.me|localhost)[^.]*$/,
+          urlPattern: /^https?:\/\/(geasscn.me|localhost)[^.]*$/,
         },
       ],
     }));
