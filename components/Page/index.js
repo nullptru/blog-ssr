@@ -91,7 +91,7 @@ export default class Page extends React.PureComponent {
 
   render() {
     const {
-      isCustom, menuItems, currentPath, children = () => '', titleMap,
+      isCustom, menuItems, currentPath, children = () => '', titleMap, customBgImage,
     } = this.props;
 
     const { Live2D } = this;
@@ -99,7 +99,7 @@ export default class Page extends React.PureComponent {
       <ErrorBoundary onError={this.handleError} >
         <HeadMeta title="Geass Blog" />
         <div id="app">
-          <Head menuItems={menuItems} titleMap={titleMap} isCustom={isCustom} currentPath={currentPath} />
+          <Head menuItems={menuItems} titleMap={titleMap} isCustom={isCustom} currentPath={currentPath} customBgImage={customBgImage} />
           <div className="container">
             {typeof children === 'function' ? children() : ''}
           </div>

@@ -66,7 +66,7 @@ export default class extends React.PureComponent {
     const tags = article.tags || [];
     const commentList = this.state.comments || comments;
     return (
-      <Page customBgImage="" currentPath={pathname}>
+      <Page customBgImage={article.imageUrl || ''} currentPath={pathname} isCustom>
         {() => {
           return (
             <React.Fragment>
